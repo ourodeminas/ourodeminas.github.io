@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ouro de Minas | Camping e Pesca em Divinópolis</title>
+<meta name="description" content="Entre no grupo do WhatsApp da Ouro de Minas e receba promoções, rifas e novidades antes de todo mundo. Divinópolis/MG.">
+<meta property="og:title" content="Ouro de Minas | Camping e Pesca">
+<meta property="og:description" content="Promoções, rifas e novidades antes de todo mundo. Rua Pernambuco, 1490 - Centro, Divinópolis/MG.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://brendorafael-cyber.github.io/ouro-de-minas/compartilhar.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+
+<!-- ============================================================
+     CONFIGURAÇÃO — edite só este bloco
+     ============================================================ -->
+<script>
+const CONFIG = {
+  pixelId: '1079693451311731',
+
+  // Google Analytics 4 — cole o ID (G-XXXXXXXXXX). Vazio = desligado.
+  ga4Id: '',
+
+  // Link do grupo de WhatsApp (destino principal)
+  linkGrupo: 'https://chat.whatsapp.com/ELDxCIOsZ3PK8Gwc4NkC4n',
+
+  // Número direto da loja, só dígitos com DDI+DDD. Ex: '5537999998888'
+  // PREENCHIDO = a mensagem vai com a origem do anúncio dentro.
+  whatsappNumero: '553730271233',
+  whatsappLinkCurto: 'https://wa.me/message/UHQIRUIY4YUFC1',
+
+  instagram: 'https://www.instagram.com/ourodeminas_pesca/',
+  maps: 'https://www.google.com/maps/search/?api=1&query=Rua+Pernambuco+1490+Centro+Divinopolis+MG',
+
+  // MODO TURBO: joga a pessoa direto pro WhatsApp depois de N segundos,
+  // sem ela precisar clicar. 0 = desligado. Qualquer toque na tela cancela.
+  redirecionarEmSegundos: 0
+};
+</script>
+
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', CONFIG.pixelId);
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1079693451311731&ev=PageView&noscript=1"/></noscript>
+
+<!-- Google Analytics 4 (só carrega se o ID estiver preenchido) -->
+<script>
+if (CONFIG.ga4Id) {
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + CONFIG.ga4Id;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function(){dataLayer.push(arguments);};
+  gtag('js', new Date());
+  gtag('config', CONFIG.ga4Id);
+}
+</script>
+
+<style>
+/* Paleta tirada do emblema da loja: dourado metálico, prata cromada,
+   preto de pedra. As estrelas e os anéis duplos também vêm de lá. */
+:root{
+  --preto:#0b0b0c;
+  --carvao:#141416;
+  --carvao-claro:#1c1c20;
+  --ouro:#e0a92a;
+  --ouro-claro:#f5cd63;
+  --ouro-palido:#fbe9a7;
+  --ouro-escuro:#a8761a;
+  --prata:#c9ccd1;
+  --prata-escura:#7d828b;
+  --verde-zap:#25d366;
+  --texto:#f2f0ec;
+  --texto-suave:#a9adb5;
+  --borda:rgba(224,169,42,.22);
+  --metal-ouro:linear-gradient(180deg,var(--ouro-palido) 0%,var(--ouro) 46%,var(--ouro-escuro) 100%);
+  --metal-prata:linear-gradient(180deg,#ffffff 0%,#eceef2 42%,#b6bcc6 100%);
+  --sistema:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  --titulo:'Barlow Condensed',var(--sistema);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--preto);
+  color:var(--texto);
+  font-family:var(--sistema);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  padding-bottom:92px; /* espaço da barra fixa */
+}
+/* Textura de pedra escura, igual ao fundo do emblema. SVG inline: nenhum
+   arquivo extra pra baixar, então não atrasa o botão. */
+body::before{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.055;
+}
+img{max-width:100%;display:block}
+a,a:link,a:hover,a:active{color:inherit;text-decoration:none}
+
+h1,h2,h3,.condensed{
+  font-family:var(--titulo);
+  text-transform:uppercase;letter-spacing:.02em;line-height:1.05;
+}
+
+.wrap{width:100%;max-width:520px;margin:0 auto;padding:0 18px}
+
+/* ---------- HERO ---------- */
+.hero{
+  position:relative;text-align:center;
+  padding:28px 0 20px;
+  background:radial-gradient(120% 75% at 50% 0%, rgba(224,169,42,.14) 0%, rgba(11,11,12,0) 62%);
+}
+.hero::after{
+  content:'';position:absolute;inset:auto 0 0 0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--borda),transparent);
+}
+/* anel duplo ouro+prata, como os dois aros do emblema */
+.logo{
+  width:128px;height:128px;margin:0 auto 13px;
+  border-radius:50%;border:2px solid var(--ouro);
+  background:var(--carvao);object-fit:cover;
+  box-shadow:
+    0 0 0 3px rgba(11,11,12,1),
+    0 0 0 4px rgba(201,204,209,.45),
+    0 0 0 9px rgba(224,169,42,.09),
+    0 12px 34px rgba(0,0,0,.65);
+}
+.logo-fallback{
+  display:none;width:128px;height:128px;margin:0 auto 13px;
+  border-radius:50%;border:2px solid var(--ouro);background:var(--carvao);
+  color:var(--ouro);font-family:var(--titulo);font-size:17px;font-weight:700;line-height:1.1;
+  align-items:center;justify-content:center;text-align:center;padding:14px;
+}
+/* lettering metálico: "OURO DE" cromado, "MINAS" dourado — como no emblema */
+.hero h1{
+  font-size:clamp(28px,7.6vw,38px);font-weight:700;
+  color:var(--texto);
+  background:var(--metal-prata);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.55));
+}
+.hero h1 span{
+  color:var(--ouro);
+  background:var(--metal-ouro);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.tagline{margin-top:7px;color:var(--texto-suave);font-size:14.5px}
+.tagline b{color:var(--texto);font-weight:600}
+.local{
+  display:inline-flex;align-items:center;gap:6px;margin-top:12px;
+  padding:5px 13px;border-radius:999px;
+  border:1px solid var(--borda);
+  background:linear-gradient(180deg,rgba(224,169,42,.10),rgba(224,169,42,.02));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07);
+  font-size:11.5px;color:var(--ouro-claro);letter-spacing:.05em;text-transform:uppercase;
+}
+
+/* ---------- OFERTA + CTA ---------- */
+.oferta{text-align:center;padding:22px 0 0}
+.oferta h2{font-size:clamp(24px,6.6vw,31px);font-weight:700}
+.oferta h2 em{
+  font-style:normal;color:var(--ouro);
+  background:var(--metal-ouro);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.oferta .sub{margin-top:8px;color:var(--texto-suave);font-size:14.5px}
+
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:18px 20px;
+  border-radius:14px;border:1px solid transparent;
+  font-family:var(--sistema); /* botão não espera fonte externa carregar */
+  font-size:17px;font-weight:700;cursor:pointer;
+  text-decoration:none !important;
+  transition:transform .15s ease,box-shadow .15s ease,background .15s ease;
+}
+.btn:active{transform:scale(.985)}
+.btn svg{width:22px;height:22px;flex:none}
+
+.btn-grupo{
+  background:linear-gradient(180deg,#2bea72,var(--verde-zap));
+  color:#06301a !important;  /* !important derruba a cor de link visitado do Chrome */
+  box-shadow:0 10px 30px rgba(37,211,102,.3);
+  animation:pulsa 2.6s ease-in-out infinite;
+}
+@keyframes pulsa{
+  0%,100%{box-shadow:0 10px 30px rgba(37,211,102,.28)}
+  50%{box-shadow:0 12px 40px rgba(37,211,102,.5)}
+}
+@media (prefers-reduced-motion:reduce){.btn-grupo{animation:none}}
+
+.btn-linha{
+  background:var(--carvao-claro);
+  border-color:var(--borda);
+  color:#f2f0ec !important;  /* idem: hex + !important por causa do :visited */
+  font-size:16px;font-weight:600;margin-top:11px;
+}
+.btn-linha:hover{background:#232329}
+.btn-linha .rotulo{flex:1;text-align:left}
+.btn-linha .seta{color:var(--texto-suave);font-size:18px}
+
+.cta-bloco{margin-top:17px}
+.selo{margin-top:10px;font-size:12.5px;color:var(--texto-suave)}
+.selo b{color:var(--ouro-claro);font-weight:600}
+
+/* saída de emergência, discreta pra não competir com o botão verde */
+.plano-b{
+  display:inline-flex;align-items:center;gap:7px;
+  margin-top:13px;padding:9px 16px;
+  border:1px solid rgba(255,255,255,.13);border-radius:999px;
+  font-size:13.5px;color:var(--texto-suave);cursor:pointer;
+}
+.plano-b b{color:var(--texto);font-weight:600}
+
+.contagem{margin-top:12px;font-size:13px;color:var(--ouro-claro);display:none}
+.contagem.on{display:block}
+
+/* ---------- BENEFÍCIOS ---------- */
+.beneficios{padding:32px 0 4px;display:grid;gap:10px}
+.item{
+  display:flex;gap:13px;align-items:flex-start;
+  background:linear-gradient(180deg,#17171a,var(--carvao));
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;padding:15px 16px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.045);
+}
+.item .ico{
+  width:38px;height:38px;flex:none;border-radius:11px;
+  background:linear-gradient(180deg,rgba(224,169,42,.17),rgba(224,169,42,.05));
+  border:1px solid var(--borda);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center;font-size:19px;
+}
+.item h3{font-size:17px;font-weight:600;letter-spacing:.01em}
+.item p{font-size:13.5px;color:var(--texto-suave);margin-top:2px;line-height:1.5}
+
+/* ---------- SEÇÕES ---------- */
+/* título de seção com as estrelinhas do emblema entre dois fios metálicos */
+.secao-titulo{
+  margin:36px 0 13px;
+  display:flex;align-items:center;gap:11px;
+  font-family:var(--titulo);font-weight:600;
+  font-size:13px;letter-spacing:.18em;color:var(--ouro);text-transform:uppercase;
+}
+.secao-titulo::before,.secao-titulo::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,204,209,.28),var(--borda));
+}
+.secao-titulo::after{transform:scaleX(-1)}
+.estrelas{color:var(--ouro);letter-spacing:.14em;font-size:9px;opacity:.85}
+.card-loja{background:var(--carvao);border:1px solid rgba(255,255,255,.06);border-radius:16px;overflow:hidden}
+.mapa{width:100%;height:185px;border:0;display:block;filter:grayscale(.35) contrast(1.05)}
+.dados{padding:16px 18px}
+.linha-dado{display:flex;gap:12px;padding:9px 0;font-size:14px}
+.linha-dado + .linha-dado{border-top:1px solid rgba(255,255,255,.05)}
+.linha-dado .rot{color:var(--texto-suave);min-width:86px;font-size:13px}
+.linha-dado .val{flex:1}
+
+footer{
+  margin-top:38px;padding:24px 0 34px;text-align:center;
+  border-top:1px solid rgba(255,255,255,.06);
+  color:var(--texto-suave);font-size:12.5px;
+}
+footer strong{
+  font-family:var(--titulo);font-size:15px;letter-spacing:.14em;
+  background:var(--metal-ouro);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:var(--ouro);
+}
+footer .estrelas{display:block;margin-bottom:8px;font-size:10px}
+
+/* ---------- BARRA FIXA — sempre visível ---------- */
+.barra-fixa{
+  position:fixed;left:0;right:0;bottom:0;z-index:60;
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,rgba(11,11,12,.55),rgba(11,11,12,.98));
+  backdrop-filter:blur(10px);
+  border-top:1px solid rgba(255,255,255,.07);
+}
+.barra-fixa .btn{max-width:520px;margin:0 auto;padding:16px;animation:none}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <img src="logo.png" alt="Ouro de Minas Camping e Pesca" class="logo"
+         onerror="this.style.display='none';document.getElementById('logo-fb').style.display='flex'">
+    <div class="logo-fallback" id="logo-fb">OURO DE<br>MINAS</div>
+
+    <h1>Ouro de <span>Minas</span></h1>
+    <p class="tagline">A casa mais completa de <b>pesca, caça e camping</b> de Divinópolis.</p>
+    <div class="local">📍 Rua Pernambuco, 1490 — Centro</div>
+  </header>
+
+  <!-- CTA PRINCIPAL — primeira dobra -->
+  <section class="oferta">
+    <h2>Entre no grupo e concorra às <em>rifas</em></h2>
+    <p class="sub">Promoções, sorteios e novidades da loja chegam primeiro pra quem está no grupo.</p>
+
+    <div class="cta-bloco">
+      <button class="btn btn-grupo" data-evento="grupo">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.14c-.25.69-1.45 1.32-2 1.4-.51.08-1.16.11-1.87-.12-.43-.14-.99-.32-1.7-.63-2.99-1.29-4.94-4.3-5.09-4.5-.15-.2-1.22-1.62-1.22-3.09s.77-2.19 1.04-2.49c.27-.3.59-.37.79-.37.2 0 .39 0 .57.01.18.01.43-.07.67.51.25.6.84 2.07.91 2.22.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.61.17.3.76 1.25 1.62 2.03 1.11 1 2.05 1.3 2.35 1.45.3.15.47.12.65-.07.17-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.18 1.41Z"/></svg>
+        Entrar no grupo do WhatsApp
+      </button>
+      <p class="selo">Grátis · sai quando quiser · <b>+2 mil pescadores</b> acompanham a loja</p>
+      <p class="contagem" id="contagem"></p>
+
+      <!-- Grupo de WhatsApp lota em 1024 pessoas e o convite pode expirar.
+           Sem esta saída, quem esbarrar nisso vira lead perdido. -->
+      <span class="plano-b" data-evento="whatsapp">Grupo cheio? <b>Chame a loja direto</b> ›</span>
+    </div>
+  </section>
+
+  <!-- BENEFÍCIOS -->
+  <section class="beneficios">
+    <div class="item">
+      <div class="ico">🎟️</div>
+      <div>
+        <h3>Rifas e sorteios</h3>
+        <p>As rifas da loja são divulgadas primeiro no grupo — quem está lá garante a cota antes de acabar.</p>
+      </div>
+    </div>
+    <div class="item">
+      <div class="ico">🏷️</div>
+      <div>
+        <h3>Promoções antes de todo mundo</h3>
+        <p>Queima de estoque, condição de fim de semana e preço especial pra quem é do grupo.</p>
+      </div>
+    </div>
+    <div class="item">
+      <div class="ico">🎣</div>
+      <div>
+        <h3>Novidades chegando</h3>
+        <p>Carretilha, vara, isca, barraca, camping. Você vê o que chegou na hora que chega.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA REPETIDO -->
+  <div style="margin-top:22px">
+    <button class="btn btn-grupo" data-evento="grupo_meio">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.14c-.25.69-1.45 1.32-2 1.4-.51.08-1.16.11-1.87-.12-.43-.14-.99-.32-1.7-.63-2.99-1.29-4.94-4.3-5.09-4.5-.15-.2-1.22-1.62-1.22-3.09s.77-2.19 1.04-2.49c.27-.3.59-.37.79-.37.2 0 .39 0 .57.01.18.01.43-.07.67.51.25.6.84 2.07.91 2.22.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.61.17.3.76 1.25 1.62 2.03 1.11 1 2.05 1.3 2.35 1.45.3.15.47.12.65-.07.17-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.18 1.41Z"/></svg>
+      Quero entrar no grupo
+    </button>
+  </div>
+
+  <!-- OUTROS CANAIS -->
+  <div class="secao-titulo"><span class="estrelas">★★★</span>Outros canais<span class="estrelas">★★★</span></div>
+
+  <button class="btn btn-linha" data-evento="whatsapp_lista">
+    <svg viewBox="0 0 24 24" fill="#25d366"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.14c-.25.69-1.45 1.32-2 1.4-.51.08-1.16.11-1.87-.12-.43-.14-.99-.32-1.7-.63-2.99-1.29-4.94-4.3-5.09-4.5-.15-.2-1.22-1.62-1.22-3.09s.77-2.19 1.04-2.49c.27-.3.59-.37.79-.37.2 0 .39 0 .57.01.18.01.43-.07.67.51.25.6.84 2.07.91 2.22.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.61.17.3.76 1.25 1.62 2.03 1.11 1 2.05 1.3 2.35 1.45.3.15.47.12.65-.07.17-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.18 1.41Z"/></svg>
+    <span class="rotulo">Falar direto com a loja</span>
+    <span class="seta">›</span>
+  </button>
+
+  <button class="btn btn-linha" data-evento="instagram">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.2" fill="#e1306c" stroke="none"/></svg>
+    <span class="rotulo">Instagram @ourodeminas_pesca</span>
+    <span class="seta">›</span>
+  </button>
+
+  <button class="btn btn-linha" data-evento="mapa">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#e0a92a" stroke-width="1.9"><path d="M12 21s7-5.7 7-11a7 7 0 1 0-14 0c0 5.3 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+    <span class="rotulo">Como chegar na loja</span>
+    <span class="seta">›</span>
+  </button>
+
+  <!-- A LOJA -->
+  <div class="secao-titulo"><span class="estrelas">★★★</span>A loja<span class="estrelas">★★★</span></div>
+  <div class="card-loja">
+    <iframe class="mapa" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+      src="https://maps.google.com/maps?q=Rua%20Pernambuco%201490%20Centro%20Divinopolis%20MG&z=16&output=embed"
+      title="Mapa da loja Ouro de Minas"></iframe>
+    <div class="dados">
+      <div class="linha-dado"><span class="rot">Endereço</span><span class="val">Rua Pernambuco, 1490 — Centro, Divinópolis/MG</span></div>
+      <div class="linha-dado"><span class="rot">Seg a Sex</span><span class="val">9h às 18h</span></div>
+      <div class="linha-dado"><span class="rot">Sábado</span><span class="val">9h às 13h</span></div>
+      <div class="linha-dado"><span class="rot">Domingo</span><span class="val">Fechado</span></div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="estrelas">★ ★ ★ ★ ★</span>
+    <strong>OURO DE MINAS</strong><br>
+    Camping e Pesca · Divinópolis — MG
+  </footer>
+</div>
+
+<!-- BARRA FIXA: presente desde o primeiro pixel da página -->
+<div class="barra-fixa">
+  <button class="btn btn-grupo" data-evento="grupo_barra">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.14c-.25.69-1.45 1.32-2 1.4-.51.08-1.16.11-1.87-.12-.43-.14-.99-.32-1.7-.63-2.99-1.29-4.94-4.3-5.09-4.5-.15-.2-1.22-1.62-1.22-3.09s.77-2.19 1.04-2.49c.27-.3.59-.37.79-.37.2 0 .39 0 .57.01.18.01.43-.07.67.51.25.6.84 2.07.91 2.22.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.61.17.3.76 1.25 1.62 2.03 1.11 1 2.05 1.3 2.35 1.45.3.15.47.12.65-.07.17-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.18 1.41Z"/></svg>
+    Entrar no grupo do WhatsApp
+  </button>
+</div>
+
+<script>
+/* ============================================================
+   RASTREAMENTO E SAÍDA PRO WHATSAPP
+   ============================================================ */
+
+const CHAVES_UTM = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'];
+
+function lerUtms(){
+  const params = new URLSearchParams(location.search);
+  const achadas = {};
+  CHAVES_UTM.forEach(k => { if (params.get(k)) achadas[k] = params.get(k); });
+  if (Object.keys(achadas).length) {
+    try { sessionStorage.setItem('om_utm', JSON.stringify(achadas)); } catch(e){}
+    return achadas;
+  }
+  try { return JSON.parse(sessionStorage.getItem('om_utm') || '{}'); } catch(e){ return {}; }
+}
+const UTM = lerUtms();
+
+function origemLegivel(){
+  const p = [];
+  if (UTM.utm_campaign) p.push(UTM.utm_campaign);
+  if (UTM.utm_content)  p.push(UTM.utm_content);
+  if (!p.length && UTM.utm_source) p.push(UTM.utm_source);
+  return p.join(' / ');
+}
+
+function linkWhatsapp(){
+  if (!CONFIG.whatsappNumero) return CONFIG.whatsappLinkCurto;
+  const origem = origemLegivel();
+  const msg = origem
+    ? 'Olá! Vim pelo site (' + origem + ') e quero saber mais.'
+    : 'Olá! Vim pelo site e quero saber mais.';
+  return 'https://wa.me/' + CONFIG.whatsappNumero + '?text=' + encodeURIComponent(msg);
+}
+
+function novoEventId(){
+  return 'om-' + Date.now() + '-' + Math.random().toString(36).slice(2,9);
+}
+
+function rastrear(nomeEvento, extra){
+  const eventId = novoEventId();
+  const dados = Object.assign({}, UTM, extra || {});
+  if (window.fbq) {
+    if (extra && extra.padrao) fbq('track', extra.padrao, dados, {eventID: eventId});
+    fbq('trackCustom', nomeEvento, dados, {eventID: eventId});
+  }
+  if (window.gtag) gtag('event', nomeEvento, dados);
+}
+
+/* Sai da página COM segurança:
+   - navegação na mesma aba, porque o navegador interno do Instagram/Facebook
+     costuma engolir window.open/target=_blank e a pessoa fica travada;
+   - 220ms de folga pro pixel despachar o evento antes da saída;
+   - trava de duplo toque, pra um clique não virar dois eventos. */
+let saindo = false;
+function irPara(url, nomeEvento, padrao, botao){
+  if (saindo) return;
+  saindo = true;
+  rastrear(nomeEvento, {botao: botao, padrao: padrao});
+  setTimeout(() => { window.location.href = url; }, 220);
+  setTimeout(() => { saindo = false; }, 2000);
+}
+
+const DESTINOS = {
+  grupo:          { url: () => CONFIG.linkGrupo, evento: 'ClickGrupoWhatsApp',  padrao: 'Lead' },
+  grupo_meio:     { url: () => CONFIG.linkGrupo, evento: 'ClickGrupoWhatsApp',  padrao: 'Lead' },
+  grupo_barra:    { url: () => CONFIG.linkGrupo, evento: 'ClickGrupoWhatsApp',  padrao: 'Lead' },
+  whatsapp:       { url: linkWhatsapp,           evento: 'ClickWhatsAppDireto', padrao: 'Contact' },
+  whatsapp_lista: { url: linkWhatsapp,           evento: 'ClickWhatsAppDireto', padrao: 'Contact' },
+  instagram:      { url: () => CONFIG.instagram, evento: 'ClickInstagram', novaAba: true },
+  mapa:           { url: () => CONFIG.maps,      evento: 'ClickComoChegar', novaAba: true }
+};
+
+document.querySelectorAll('[data-evento]').forEach(el => {
+  const chave = el.dataset.evento;
+  const d = DESTINOS[chave];
+  if (!d) return;
+  el.style.cursor = 'pointer';
+
+  if (d.novaAba) {
+    // canais secundários abrem fora, pra não tirar a pessoa da página
+    el.addEventListener('click', () => {
+      rastrear(d.evento, {botao: chave});
+      window.open(d.url(), '_blank', 'noopener');
+    });
+  } else {
+    el.addEventListener('click', () => irPara(d.url(), d.evento, d.padrao, chave));
+  }
+});
+
+/* Marca quem leu a página de verdade (dispara uma vez só) */
+let marcouScroll = false;
+window.addEventListener('scroll', () => {
+  if (marcouScroll) return;
+  const lido = (window.scrollY + window.innerHeight) / document.body.scrollHeight;
+  if (lido > 0.6) { marcouScroll = true; rastrear('LeuPagina'); }
+}, {passive:true});
+
+/* MODO TURBO — só roda se CONFIG.redirecionarEmSegundos for maior que zero */
+if (CONFIG.redirecionarEmSegundos > 0) {
+  let resta = CONFIG.redirecionarEmSegundos;
+  const alvo = document.getElementById('contagem');
+  alvo.classList.add('on');
+  const pintar = () => alvo.textContent = 'Abrindo o WhatsApp em ' + resta + '...';
+  pintar();
+  const t = setInterval(() => {
+    resta--;
+    if (resta <= 0) {
+      clearInterval(t);
+      alvo.textContent = 'Abrindo o WhatsApp...';
+      irPara(CONFIG.linkGrupo, 'RedirecionoAutomatico', 'Lead', 'auto');
+    } else pintar();
+  }, 1000);
+  ['click','touchstart','wheel'].forEach(ev =>
+    window.addEventListener(ev, () => { clearInterval(t); alvo.classList.remove('on'); }, {once:true, passive:true})
+  );
+}
+</script>
+</body>
+</html>
