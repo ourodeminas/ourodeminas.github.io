@@ -37,6 +37,11 @@ const CONFIG = {
   instagram: 'https://www.instagram.com/ourodeminas_pesca/',
   maps: 'https://www.google.com/maps/search/?api=1&query=Rua+Pernambuco+1490+Centro+Divinopolis+MG',
 
+  // Webhook que recebe cada lead (nome/telefone/email) pra salvar numa planilha.
+  // Cole aqui a URL do Web App do Google Apps Script (instruções no fim deste arquivo, em comentário).
+  // Vazio = o formulário continua pedindo os dados e melhorando o pixel, só não salva a lista.
+  leadsWebhookUrl: 'https://script.google.com/macros/s/AKfycbwawkDDpGHMa1l8xiW9OXx4K26SmzlIlse1TFt0T687jrLk2W7QJmK3G5G4m2akdAyX/exec',
+
   // MODO TURBO: joga a pessoa direto pro WhatsApp depois de N segundos,
   // sem ela precisar clicar. 0 = desligado. Qualquer toque na tela cancela.
   redirecionarEmSegundos: 0
@@ -291,6 +296,39 @@ footer strong{
 }
 footer .estrelas{display:block;margin-bottom:8px;font-size:10px}
 
+/* ---------- MODAL DE CONTATO — pede nome/telefone/email antes do WhatsApp ---------- */
+.modal-overlay{
+  position:fixed;inset:0;z-index:80;
+  background:rgba(0,0,0,.72);backdrop-filter:blur(3px);
+  display:flex;align-items:flex-end;justify-content:center;
+}
+.modal-overlay[hidden]{display:none}
+.modal-card{
+  width:100%;max-width:520px;
+  background:var(--carvao);border:1px solid var(--borda);
+  border-radius:20px 20px 0 0;
+  padding:22px 20px calc(22px + env(safe-area-inset-bottom));
+  position:relative;
+  animation:sobe .22s ease-out;
+}
+@keyframes sobe{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-fechar{
+  position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;
+  background:var(--carvao-claro);border:1px solid var(--borda);color:var(--texto-suave);
+  font-size:14px;cursor:pointer;
+}
+.modal-card h3{font-family:var(--titulo);font-size:22px;text-transform:none;letter-spacing:0}
+.modal-sub{color:var(--texto-suave);font-size:13.5px;margin-top:4px}
+.campo{display:block;margin-top:14px;font-size:13px;color:var(--texto-suave)}
+.campo span{display:block;margin-bottom:5px}
+.campo i{font-style:normal;opacity:.7}
+.campo input{
+  width:100%;padding:12px 14px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.12);background:var(--carvao-claro);
+  color:var(--texto);font-size:15px;font-family:var(--sistema);
+}
+.campo input:focus{outline:none;border-color:var(--ouro)}
+
 /* ---------- BARRA FIXA — sempre visível ---------- */
 .barra-fixa{
   position:fixed;left:0;right:0;bottom:0;z-index:60;
@@ -419,6 +457,30 @@ footer .estrelas{display:block;margin-bottom:8px;font-size:10px}
   </button>
 </div>
 
+<!-- MODAL DE CONTATO — abre antes de qualquer saída pro WhatsApp -->
+<div class="modal-overlay" id="modalContato" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+    <button class="modal-fechar" id="modalFechar" type="button" aria-label="Fechar">✕</button>
+    <h3 id="modalTitulo">Quase lá!</h3>
+    <p class="modal-sub">Deixa seus dados que a gente já te leva pro WhatsApp.</p>
+    <form id="formContato">
+      <label class="campo">
+        <span>Nome</span>
+        <input type="text" id="campoNome" name="nome" autocomplete="name" required>
+      </label>
+      <label class="campo">
+        <span>WhatsApp</span>
+        <input type="tel" id="campoTelefone" name="telefone" autocomplete="tel" inputmode="numeric" placeholder="(37) 9xxxx-xxxx" required>
+      </label>
+      <label class="campo">
+        <span>E-mail <i>(opcional)</i></span>
+        <input type="email" id="campoEmail" name="email" autocomplete="email">
+      </label>
+      <button type="submit" class="btn btn-grupo" style="margin-top:6px">Continuar pro WhatsApp</button>
+    </form>
+  </div>
+</div>
+
 <script>
 /* ============================================================
    RASTREAMENTO E SAÍDA PRO WHATSAPP
@@ -493,6 +555,80 @@ const DESTINOS = {
   mapa:           { url: () => CONFIG.maps,      evento: 'ClickComoChegar', novaAba: true }
 };
 
+/* Botões que levam pro WhatsApp (grupo ou número direto) passam pelo
+   formulário antes — os outros (Instagram, mapa) seguem direto. */
+const PASSA_PELO_FORMULARIO = ['grupo', 'grupo_meio', 'grupo_barra', 'whatsapp', 'whatsapp_lista'];
+
+const modalContato = document.getElementById('modalContato');
+const formContato = document.getElementById('formContato');
+let destinoPendente = null;
+
+function abrirModal(chave){
+  destinoPendente = chave;
+  modalContato.hidden = false;
+  document.getElementById('campoNome').focus();
+}
+function fecharModal(){
+  modalContato.hidden = true;
+  destinoPendente = null;
+}
+document.getElementById('modalFechar').addEventListener('click', fecharModal);
+modalContato.addEventListener('click', e => { if (e.target === modalContato) fecharModal(); });
+
+function apenasDigitos(v){ return (v || '').replace(/\D/g, ''); }
+
+/* Manda o lead pro webhook (planilha). Só roda se CONFIG.leadsWebhookUrl
+   estiver preenchido; keepalive garante o envio mesmo saindo da página. */
+function salvarLead(dados){
+  if (!CONFIG.leadsWebhookUrl) return;
+  try {
+    fetch(CONFIG.leadsWebhookUrl, {
+      method: 'POST',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'}, // text/plain evita preflight de CORS no Apps Script
+      body: JSON.stringify(dados),
+      keepalive: true
+    }).catch(() => {});
+  } catch (e) {}
+}
+
+formContato.addEventListener('submit', function(e){
+  e.preventDefault();
+  const chave = destinoPendente;
+  const d = chave && DESTINOS[chave];
+  if (!d) return;
+
+  const nome = document.getElementById('campoNome').value.trim();
+  const email = document.getElementById('campoEmail').value.trim();
+  const telefone = apenasDigitos(document.getElementById('campoTelefone').value);
+  const telefoneComDDI = telefone && !telefone.startsWith('55') ? '55' + telefone : telefone;
+
+  // Advanced Matching: melhora a qualidade de correspondência do pixel.
+  // O próprio fbq faz o hash — nunca manda nome/telefone/email crus nos parâmetros do evento.
+  if (window.fbq) {
+    const userData = { ph: telefoneComDDI };
+    if (nome) {
+      const partes = nome.split(' ');
+      userData.fn = partes[0];
+      if (partes.length > 1) userData.ln = partes.slice(1).join(' ');
+    }
+    if (email) userData.em = email;
+    fbq('set', 'userData', userData);
+  }
+
+  salvarLead({
+    nome: nome,
+    telefone: telefoneComDDI,
+    email: email,
+    origem: origemLegivel(),
+    botao: chave,
+    pagina: location.href,
+    data: new Date().toISOString()
+  });
+
+  fecharModal();
+  irPara(d.url(), d.evento, d.padrao, chave);
+});
+
 document.querySelectorAll('[data-evento]').forEach(el => {
   const chave = el.dataset.evento;
   const d = DESTINOS[chave];
@@ -505,6 +641,8 @@ document.querySelectorAll('[data-evento]').forEach(el => {
       rastrear(d.evento, {botao: chave});
       window.open(d.url(), '_blank', 'noopener');
     });
+  } else if (PASSA_PELO_FORMULARIO.includes(chave)) {
+    el.addEventListener('click', () => abrirModal(chave));
   } else {
     el.addEventListener('click', () => irPara(d.url(), d.evento, d.padrao, chave));
   }
