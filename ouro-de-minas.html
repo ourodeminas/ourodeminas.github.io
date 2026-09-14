@@ -58,7 +58,25 @@ n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', CONFIG.pixelId);
+
+// ID anônimo e persistente (não é dado pessoal, é só um identificador
+// aleatório salvo no navegador). Manda ele já no init pra TODO evento —
+// incluindo o PageView, antes de qualquer formulário — carregar pelo menos
+// um parâmetro de correspondência avançada. Sem isso, o Meta só via os
+// dados de quem preenchia o formulário (~15% do tráfego) e marcava a
+// correspondência avançada manual como "não configurada".
+function idAnonimo(){
+  try {
+    let id = localStorage.getItem('om_uid');
+    if (!id) {
+      id = crypto.randomUUID ? crypto.randomUUID() : 'om-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+      localStorage.setItem('om_uid', id);
+    }
+    return id;
+  } catch(e){ return null; }
+}
+const uid = idAnonimo();
+fbq('init', CONFIG.pixelId, uid ? { external_id: uid } : {});
 fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
