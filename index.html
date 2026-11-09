@@ -26,6 +26,11 @@ const CONFIG = {
   // Google Analytics 4 — cole o ID (G-XXXXXXXXXX). Vazio = desligado.
   ga4Id: 'G-DPDM8C21XP',
 
+  // Microsoft Clarity (mapa de cliques e gravação de sessões). Cole o ID do projeto.
+  // Vazio = desligado. Só carrega DEPOIS do aceite de cookies.
+  // Ao ativar, citar o Clarity no texto do aviso de cookies.
+  clarityId: '',
+
   // Link do grupo de WhatsApp (destino principal)
   linkGrupo: 'https://chat.whatsapp.com/ELDxCIOsZ3PK8Gwc4NkC4n',
 
@@ -48,23 +53,11 @@ const CONFIG = {
 };
 </script>
 
-<!-- Meta Pixel -->
+<!-- Medição (Meta Pixel + Google Analytics 4): só carrega DEPOIS que a pessoa aceita os cookies (LGPD).
+     Sem aceite não carrega nada e não grava identificador no aparelho. -->
 <script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-
 // ID anônimo e persistente (não é dado pessoal, é só um identificador
-// aleatório salvo no navegador). Manda ele já no init pra TODO evento —
-// incluindo o PageView, antes de qualquer formulário — carregar pelo menos
-// um parâmetro de correspondência avançada. Sem isso, o Meta só via os
-// dados de quem preenchia o formulário (~15% do tráfego) e marcava a
-// correspondência avançada manual como "não configurada".
+// aleatório salvo no navegador). Só é criado depois do aceite.
 function idAnonimo(){
   try {
     let id = localStorage.getItem('om_uid');
@@ -75,25 +68,48 @@ function idAnonimo(){
     return id;
   } catch(e){ return null; }
 }
-const uid = idAnonimo();
-fbq('init', CONFIG.pixelId, uid ? { external_id: uid } : {});
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1079693451311731&ev=PageView&noscript=1"/></noscript>
 
-<!-- Google Analytics 4 (só carrega se o ID estiver preenchido) -->
-<script>
-if (CONFIG.ga4Id) {
-  var s = document.createElement('script');
-  s.async = true;
-  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + CONFIG.ga4Id;
-  document.head.appendChild(s);
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function(){dataLayer.push(arguments);};
-  gtag('js', new Date());
-  gtag('config', CONFIG.ga4Id);
+function carregarMedicao(){
+  if (window.__medicaoCarregada) return;
+  window.__medicaoCarregada = true;
+
+  // Meta Pixel
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  const uid = idAnonimo();
+  fbq('init', CONFIG.pixelId, uid ? { external_id: uid } : {});
+  fbq('track', 'PageView');
+
+  // Microsoft Clarity (só carrega se o ID estiver preenchido)
+  if (CONFIG.clarityId) {
+    (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script",CONFIG.clarityId);
+  }
+
+  // Google Analytics 4 (só carrega se o ID estiver preenchido)
+  if (CONFIG.ga4Id) {
+    var g = document.createElement('script');
+    g.async = true;
+    g.src = 'https://www.googletagmanager.com/gtag/js?id=' + CONFIG.ga4Id;
+    document.head.appendChild(g);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function(){dataLayer.push(arguments);};
+    gtag('js', new Date());
+    gtag('config', CONFIG.ga4Id);
+  }
 }
+
+// Escolha salva neste aparelho: 'aceito' | 'recusado' | nada ainda
+function lerCookies(){ try { return localStorage.getItem('om_cookies'); } catch(e){ return null; } }
+function gravarCookies(v){ try { localStorage.setItem('om_cookies', v); } catch(e){} }
+if (lerCookies() === 'aceito') carregarMedicao();
 </script>
 
 <style>
@@ -356,6 +372,43 @@ footer .estrelas{display:block;margin-bottom:8px;font-size:10px}
   border-top:1px solid rgba(255,255,255,.07);
 }
 .barra-fixa .btn{max-width:520px;margin:0 auto;padding:16px;animation:none}
+
+
+/* ---------- ENXUGADA: aviso de idade, links discretos, aviso do formulário ---------- */
+.aviso-idade{margin-top:14px;font-size:12px;line-height:1.45;color:var(--texto-suave);text-align:center}
+.links-rapidos{margin-top:22px;text-align:center;font-size:13px;color:var(--texto-suave)}
+.links-rapidos span[data-evento]{text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.links-rapidos .sep{margin:0 8px;opacity:.6}
+.form-aviso{margin-top:10px;font-size:11.5px;line-height:1.4;color:var(--texto-suave)}
+
+/* ---------- AVISO DE COOKIES ---------- */
+.cookies{
+  position:fixed;left:0;right:0;bottom:0;z-index:70;
+  padding:14px 16px calc(14px + env(safe-area-inset-bottom));
+  background:rgba(11,11,12,.98);
+  border-top:1px solid var(--borda);
+  box-shadow:0 -8px 28px rgba(0,0,0,.55);
+}
+.cookies[hidden]{display:none}
+.cookies-in{max-width:520px;margin:0 auto}
+.cookies p{font-size:13.5px;line-height:1.45;color:var(--texto)}
+.cookies .mais{margin-top:8px;font-size:12.5px;color:var(--texto-suave);line-height:1.5}
+.cookies .mais[hidden]{display:none}
+.cookies-botoes{display:flex;gap:10px;margin-top:12px}
+.cookies-botoes button{
+  flex:1;padding:13px 10px;border-radius:12px;font-size:15px;font-weight:700;
+  font-family:var(--sistema);cursor:pointer;border:1px solid var(--borda);
+}
+.cookies-aceitar{background:var(--metal-ouro);color:#1a1205;border-color:transparent!important}
+.cookies-recusar{background:transparent;color:var(--texto)}
+.cookies-saiba{
+  background:none;border:0;color:var(--ouro-claro);font-size:12.5px;
+  text-decoration:underline;padding:0;margin-top:6px;cursor:pointer;font-family:var(--sistema);
+}
+footer .cookies-link{
+  display:inline-block;margin-top:10px;font-size:12px;color:var(--texto-suave);
+  text-decoration:underline;background:none;border:0;cursor:pointer;font-family:var(--sistema);
+}
 </style>
 </head>
 <body>
@@ -392,66 +445,42 @@ footer .estrelas{display:block;margin-bottom:8px;font-size:10px}
     </div>
   </section>
 
-  <!-- BENEFÍCIOS -->
-  <section class="beneficios">
+  <!-- COMO FUNCIONA -->
+  <section class="beneficios" id="comoFunciona">
     <div class="item">
-      <div class="ico">🎟️</div>
+      <div class="ico">1️⃣</div>
       <div>
-        <h3>Rifas e sorteios</h3>
-        <p>As rifas da loja são divulgadas primeiro no grupo — quem está lá garante a cota antes de acabar.</p>
+        <h3>Entre no grupo</h3>
+        <p>É grátis e você sai quando quiser.</p>
       </div>
     </div>
     <div class="item">
-      <div class="ico">🏷️</div>
+      <div class="ico">2️⃣</div>
       <div>
-        <h3>Promoções antes de todo mundo</h3>
-        <p>Queima de estoque, condição de fim de semana e preço especial pra quem é do grupo.</p>
+        <h3>Escolha seu número</h3>
+        <p>As rifas têm poucos números. Você escolhe o seu direto no grupo.</p>
       </div>
     </div>
     <div class="item">
-      <div class="ico">🎣</div>
+      <div class="ico">3️⃣</div>
       <div>
-        <h3>Novidades chegando</h3>
-        <p>Carretilha, vara, isca, barraca, camping. Você vê o que chegou na hora que chega.</p>
+        <h3>Pague por Pix e concorra</h3>
+        <p>Pagou, está concorrendo. O resultado sai no próprio grupo, pra todo mundo ver.</p>
       </div>
     </div>
   </section>
+  <p class="aviso-idade">Só para maiores de 18 anos. As regras de cada rifa são divulgadas no grupo.</p>
 
-  <!-- CTA REPETIDO -->
-  <div style="margin-top:22px">
-    <button class="btn btn-grupo" data-evento="grupo_meio">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.14c-.25.69-1.45 1.32-2 1.4-.51.08-1.16.11-1.87-.12-.43-.14-.99-.32-1.7-.63-2.99-1.29-4.94-4.3-5.09-4.5-.15-.2-1.22-1.62-1.22-3.09s.77-2.19 1.04-2.49c.27-.3.59-.37.79-.37.2 0 .39 0 .57.01.18.01.43-.07.67.51.25.6.84 2.07.91 2.22.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.61.17.3.76 1.25 1.62 2.03 1.11 1 2.05 1.3 2.35 1.45.3.15.47.12.65-.07.17-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.18 1.41Z"/></svg>
-      Quero entrar no grupo
-    </button>
-  </div>
-
-  <!-- OUTROS CANAIS -->
-  <div class="secao-titulo"><span class="estrelas">★★★</span>Outros canais<span class="estrelas">★★★</span></div>
-
-  <button class="btn btn-linha" data-evento="whatsapp_lista">
-    <svg viewBox="0 0 24 24" fill="#25d366"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.14c-.25.69-1.45 1.32-2 1.4-.51.08-1.16.11-1.87-.12-.43-.14-.99-.32-1.7-.63-2.99-1.29-4.94-4.3-5.09-4.5-.15-.2-1.22-1.62-1.22-3.09s.77-2.19 1.04-2.49c.27-.3.59-.37.79-.37.2 0 .39 0 .57.01.18.01.43-.07.67.51.25.6.84 2.07.91 2.22.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.61.17.3.76 1.25 1.62 2.03 1.11 1 2.05 1.3 2.35 1.45.3.15.47.12.65-.07.17-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.18 1.41Z"/></svg>
-    <span class="rotulo">Falar direto com a loja</span>
-    <span class="seta">›</span>
-  </button>
-
-  <button class="btn btn-linha" data-evento="instagram">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.2" fill="#e1306c" stroke="none"/></svg>
-    <span class="rotulo">Instagram @ourodeminas_pesca</span>
-    <span class="seta">›</span>
-  </button>
-
-  <button class="btn btn-linha" data-evento="mapa">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#e0a92a" stroke-width="1.9"><path d="M12 21s7-5.7 7-11a7 7 0 1 0-14 0c0 5.3 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-    <span class="rotulo">Como chegar na loja</span>
-    <span class="seta">›</span>
-  </button>
+  <!-- OUTROS CANAIS (discreto: quase ninguém clicava nos botões grandes) -->
+  <p class="links-rapidos">
+    <span data-evento="instagram">Instagram @ourodeminas_pesca</span>
+    <span class="sep">·</span>
+    <span data-evento="mapa">Como chegar</span>
+  </p>
 
   <!-- A LOJA -->
   <div class="secao-titulo"><span class="estrelas">★★★</span>A loja<span class="estrelas">★★★</span></div>
   <div class="card-loja">
-    <iframe class="mapa" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-      src="https://maps.google.com/maps?q=Rua%20Pernambuco%201490%20Centro%20Divinopolis%20MG&z=16&output=embed"
-      title="Mapa da loja Ouro de Minas"></iframe>
     <div class="dados">
       <div class="linha-dado"><span class="rot">Endereço</span><span class="val">Rua Pernambuco, 1490 — Centro, Divinópolis/MG</span></div>
       <div class="linha-dado"><span class="rot">Seg a Sex</span><span class="val">9h às 18h</span></div>
@@ -463,7 +492,8 @@ footer .estrelas{display:block;margin-bottom:8px;font-size:10px}
   <footer>
     <span class="estrelas">★ ★ ★ ★ ★</span>
     <strong>OURO DE MINAS</strong><br>
-    Camping e Pesca · Divinópolis — MG
+    Camping e Pesca · Divinópolis — MG<br>
+    <button type="button" class="cookies-link" id="abrirCookies">Preferências de cookies</button>
   </footer>
 </div>
 
@@ -475,12 +505,30 @@ footer .estrelas{display:block;margin-bottom:8px;font-size:10px}
   </button>
 </div>
 
+<!-- AVISO DE COOKIES (LGPD) — a medição só liga se a pessoa aceitar -->
+<div class="cookies" id="avisoCookies" role="dialog" aria-label="Aviso de cookies" hidden>
+  <div class="cookies-in">
+    <p>🍪 Usamos cookies para medir o desempenho do site e melhorar nossos anúncios. Você escolhe: pode aceitar ou recusar.</p>
+    <button type="button" class="cookies-saiba" id="cookiesSaiba" aria-expanded="false">Saiba mais</button>
+    <p class="mais" id="cookiesMais" hidden>
+      Se você aceitar, carregamos o Meta Pixel e o Google Analytics, que usam cookies e identificadores
+      para contar visitas e cliques. Se recusar, eles não são carregados. O formulário de contato
+      continua funcionando nos dois casos: nome e telefone são usados só para a loja falar com você.
+      Você pode mudar de ideia a qualquer momento em &ldquo;Preferências de cookies&rdquo;, no rodapé.
+    </p>
+    <div class="cookies-botoes">
+      <button type="button" class="cookies-recusar" id="cookiesRecusar">Recusar</button>
+      <button type="button" class="cookies-aceitar" id="cookiesAceitar">Aceitar</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL DE CONTATO — abre antes de qualquer saída pro WhatsApp -->
 <div class="modal-overlay" id="modalContato" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
     <button class="modal-fechar" id="modalFechar" type="button" aria-label="Fechar">✕</button>
     <h3 id="modalTitulo">Quase lá!</h3>
-    <p class="modal-sub">Deixa seus dados que a gente já te leva pro WhatsApp.</p>
+    <p class="modal-sub">Só nome e WhatsApp, e a gente já te leva pro grupo.</p>
     <form id="formContato">
       <label class="campo">
         <span>Nome</span>
@@ -490,11 +538,8 @@ footer .estrelas{display:block;margin-bottom:8px;font-size:10px}
         <span>WhatsApp</span>
         <input type="tel" id="campoTelefone" name="telefone" autocomplete="tel" inputmode="numeric" placeholder="(37) 9xxxx-xxxx" required>
       </label>
-      <label class="campo">
-        <span>E-mail</span>
-        <input type="email" id="campoEmail" name="email" autocomplete="email" required>
-      </label>
       <button type="submit" class="btn btn-grupo" style="margin-top:6px">Continuar pro WhatsApp</button>
+      <p class="form-aviso">Ao continuar, você aceita que a loja fale com você pelo WhatsApp. Seus dados ficam só com a loja e não são vendidos nem repassados.</p>
     </form>
   </div>
 </div>
@@ -581,17 +626,25 @@ const modalContato = document.getElementById('modalContato');
 const formContato = document.getElementById('formContato');
 let destinoPendente = null;
 
+let modalAbertoEm = 0;
 function abrirModal(chave){
   destinoPendente = chave;
+  modalAbertoEm = Date.now();
+  rastrear('abriu_formulario', {botao: chave});
   modalContato.hidden = false;
   document.getElementById('campoNome').focus();
 }
-function fecharModal(){
+function segundosNoFormulario(){ return Math.round((Date.now() - modalAbertoEm) / 1000); }
+function fecharModal(abandonou){
+  // abandonou = true quando a pessoa fecha sem enviar
+  if (abandonou === true && destinoPendente) {
+    rastrear('fechou_formulario', {botao: destinoPendente, segundos: segundosNoFormulario()});
+  }
   modalContato.hidden = true;
   destinoPendente = null;
 }
-document.getElementById('modalFechar').addEventListener('click', fecharModal);
-modalContato.addEventListener('click', e => { if (e.target === modalContato) fecharModal(); });
+document.getElementById('modalFechar').addEventListener('click', () => fecharModal(true));
+modalContato.addEventListener('click', e => { if (e.target === modalContato) fecharModal(true); });
 
 function apenasDigitos(v){ return (v || '').replace(/\D/g, ''); }
 
@@ -616,7 +669,7 @@ formContato.addEventListener('submit', function(e){
   if (!d) return;
 
   const nome = document.getElementById('campoNome').value.trim();
-  const email = document.getElementById('campoEmail').value.trim();
+  const email = ''; // campo de e-mail foi retirado do formulário (mais leve)
   const telefone = apenasDigitos(document.getElementById('campoTelefone').value);
   const telefoneComDDI = telefone && !telefone.startsWith('55') ? '55' + telefone : telefone;
 
@@ -643,6 +696,7 @@ formContato.addEventListener('submit', function(e){
     data: new Date().toISOString()
   });
 
+  rastrear('enviou_formulario', {botao: chave, segundos: segundosNoFormulario()});
   fecharModal();
   irPara(d.url(), d.evento, d.padrao, chave);
 });
@@ -674,6 +728,16 @@ window.addEventListener('scroll', () => {
   if (lido > 0.6) { marcouScroll = true; rastrear('LeuPagina'); }
 }, {passive:true});
 
+/* Marca quem chegou na seção "Como funciona" (uma vez só) */
+(function(){
+  const alvo = document.getElementById('comoFunciona');
+  if (!alvo || !('IntersectionObserver' in window)) return;
+  const obs = new IntersectionObserver(function(entradas){
+    if (entradas.some(e => e.isIntersecting)) { rastrear('viu_como_funciona'); obs.disconnect(); }
+  }, {threshold: 0.6});
+  obs.observe(alvo);
+})();
+
 /* MODO TURBO — só roda se CONFIG.redirecionarEmSegundos for maior que zero */
 if (CONFIG.redirecionarEmSegundos > 0) {
   let resta = CONFIG.redirecionarEmSegundos;
@@ -693,6 +757,29 @@ if (CONFIG.redirecionarEmSegundos > 0) {
     window.addEventListener(ev, () => { clearInterval(t); alvo.classList.remove('on'); }, {once:true, passive:true})
   );
 }
+
+/* ---------- AVISO DE COOKIES ---------- */
+(function(){
+  const aviso = document.getElementById('avisoCookies');
+  const mais = document.getElementById('cookiesMais');
+  const saiba = document.getElementById('cookiesSaiba');
+  function mostrar(){ aviso.hidden = false; }
+  function esconder(){ aviso.hidden = true; }
+  if (!lerCookies()) mostrar();
+  document.getElementById('cookiesAceitar').addEventListener('click', function(){
+    gravarCookies('aceito'); esconder(); carregarMedicao();
+  });
+  document.getElementById('cookiesRecusar').addEventListener('click', function(){
+    gravarCookies('recusado'); esconder();
+    // Se já tinha aceitado antes, recarrega pra desligar pixel/GA4 desta visita.
+    if (window.__medicaoCarregada) location.reload();
+  });
+  saiba.addEventListener('click', function(){
+    mais.hidden = !mais.hidden;
+    saiba.setAttribute('aria-expanded', String(!mais.hidden));
+  });
+  document.getElementById('abrirCookies').addEventListener('click', mostrar);
+})();
 </script>
 </body>
 </html>
